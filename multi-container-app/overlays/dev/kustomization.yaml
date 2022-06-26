@@ -1,0 +1,6 @@
+bases:
+- ../../base
+namePrefix: dev-
+patches:
+- replicas.yaml
+- limits.yaml
