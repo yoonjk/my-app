@@ -1,0 +1,17 @@
+{
+	"ulid": "01FMPF78YSTBV0Q7J8602XN45X",
+	"minTime": 1637114401219,
+	"maxTime": 1637121600000,
+	"stats": {
+		"numSamples": 92065,
+		"numSeries": 662,
+		"numChunks": 1344
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01FMPF78YSTBV0Q7J8602XN45X"
+		]
+	},
+	"version": 1
+}

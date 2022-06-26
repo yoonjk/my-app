@@ -1,0 +1,11 @@
+route:
+    receiver: 'slack'
+
+receivers:
+    - name: 'slack'
+      slack_configs:
+          - send_resolved: true
+            text: "{{ .CommonAnnotations.description }}"
+            username: 'nexweb1@gmail.com'
+            channel: '#nexweb'
+            api_url: 'https://hooks.slack.com/services/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'

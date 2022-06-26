@@ -1,0 +1,14 @@
+version: '2'
+
+networks:
+  trace:
+
+services:
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    restart: always
+    networks:
+      - trace
+    ports:
+      - 9411:9411

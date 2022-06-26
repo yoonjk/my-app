@@ -1,0 +1,17 @@
+{
+	"ulid": "01FMPF792V60M10ZYASCZDXE6B",
+	"minTime": 1637122456495,
+	"maxTime": 1637128800000,
+	"stats": {
+		"numSamples": 61380,
+		"numSeries": 662,
+		"numChunks": 662
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01FMPF792V60M10ZYASCZDXE6B"
+		]
+	},
+	"version": 1
+}
