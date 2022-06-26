@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-target-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ibmc-file-bronze
+  resources:
+    requests:
+      storage: 1Gi

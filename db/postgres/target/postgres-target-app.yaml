@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-target
+  labels:
+    app: postgres-target
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-target
+  template:
+    metadata:
+      labels:
+        app: postgres-target
+    spec:
+      containers:
+        - name: postgres-target
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-target-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data:z
+              name: postgres-target-vol
+      volumes:
+      - name: postgres-target-vol
+        persistentVolumeClaim:
+          claimName: postgres-target-pvc

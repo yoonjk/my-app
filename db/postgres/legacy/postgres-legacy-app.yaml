@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-legacy
+  labels:
+    app: postgres-legacy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-legacy
+  template:
+    metadata:
+      labels:
+        app: postgres-legacy
+    spec:
+      containers:
+        - name: postgres-legacy
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-legacy-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data:z
+              name: postgres-legacy-vol
+      volumes:
+      - name: postgres-legacy-vol
+        persistentVolumeClaim:
+          claimName: postgres-legacy-pvc
