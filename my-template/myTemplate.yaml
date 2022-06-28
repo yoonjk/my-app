@@ -1,0 +1,55 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: my-template
+metadata:
+  name: my-template
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: ${MY_NAME}
+    labels: 
+      app: ${MY_NAME}
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: ${MY_NAME}
+    strategy: {}
+    template:
+      metadata:
+        labels:
+          app: ${MY_NAME}
+      spec:
+        containers:
+        - name: nginx
+          image: quay.io/redhattraining/hello-world-nginx
+          resources: 
+            requests:
+              memory: ${MEMORY_SIZE}
+              cpu: ${CPU_COUNT}
+
+parameters:
+- description: test desc
+  displayName: disp
+  name: MY_NAME
+  required: true
+  value: mydb
+- description: count
+  displayName: disp2
+  name: REPLICAS_COUNT
+  value: "2"
+- description: count
+  displayName: disp3
+  name: MEMORY_SIZE
+  value: "512Mi"
+- description: count
+  displayName: disp3
+  name: CPU_COUNT
+  value: "100m"
+- description: userpass use random
+  name: PASSWORD
+  generate: expression
+  from: "[\\A]"
+message: "Secret is ${PASSWORD}"
