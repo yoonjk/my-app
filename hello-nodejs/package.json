@@ -1,14 +1,15 @@
 {
-  "name": "nodejs-helloworld",
+  "name": "node-configmap",
   "version": "1.0.0",
-  "description": "Hello World!",
+  "description": "A simple Node.js app to demonstrate config maps and secrets",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "author": "Red Hat Training",
+  "author": "Bootcamp Training",
   "license": "ASL",
   "dependencies": {
-    "express": "4.14.x"
+    "express": "4.14.x",
+    "swagger-ui-express": "^4.4.0"
   }
 }
