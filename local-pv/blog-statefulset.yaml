@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet    # 상태 유지의 Pod을 생성한다.
+metadata:
+  name: blog-stateful
+spec:
+  selector:
+    matchLabels:
+      app: blog #  .spec.template.metadata.labels 값과 일치
+  serviceName: "blog-svc"
+  replicas: 3 # by default is 1 복제 오브젝트의 갯수를 지정한다.
+  template:  # Stateful Set을 생성할 도커 이미지의 스펙을 지정한다. Pod의 이미지 스펙과 동일하다.
+    metadata:
+      labels:
+        app: blog #  .spec.selector.matchLabels 값과 일치
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: blog-app
+        image: app:latest  # 로컬에서 생성한 Docker 이미지를 불러와 컨테이너를 생성한다.
+        imagePullPolicy: Never  # 로컬에서 생성한 이미지를 호출하기 위해 imagePullPolicy를 Never로 설정한다.아니면 Docker Hub에서 이미지를 내려받으려 시도한다.
+        ports:
+          - containerPort: 8080
+        args: ["-t", "-i"]
+      - name: blog-mysql
+        image: mysql:latest  # Docker Hub에서 불러온 이미지
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: password
+          - name: MYSQL_PASSWORD
+            value: password
+          - name: MYSQL_DATABASE
+            value: test
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+        - name:  blog-vol-claim
+          mountPath: /tmp
+  volumeClaimTemplates:
+  - metadata:
+      name: test-pv    # VM claim의 이름을 지정한다.
+    spec:
+      accessModes: 
+        - ReadWriteOnce
+      storageClassName: manual
+      resources:
+        requests:
+          storage: 10Mi

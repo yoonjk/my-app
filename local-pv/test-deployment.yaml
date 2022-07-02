@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-pod
+  labels:
+    app: test-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-pod
+  template:
+    metadata:
+      labels:
+        app: test-pod
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ['sh', '-c', 'echo "The local volume is mounted to testpod...!" > /mnt/test.txt && sleep 3600']
+        volumeMounts:
+          - name: local-persistent-storage
+            mountPath: /mnt
+      volumes:
+      - name: local-persistent-storage
+        persistentVolumeClaim:
+          claimName: test-pvc
