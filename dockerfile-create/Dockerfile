@@ -4,8 +4,9 @@ MAINTAINER Hello docker nexweb1@gmail.com
 
 Label description="A custom apache container based on UBI 8"
 
-ENV APP_ROOT=/scripts/ 
-ENV APACHE_USER=apache
+ENV APP_ROOT=/scripts/ \ 
+    APACHE_USER=apache 
+ENV APP_DIRS /etc/httpd/logs/ /run/httpd/
 
 RUN yum install -y httpd && \
     yum clean all && \
@@ -13,9 +14,8 @@ RUN yum install -y httpd && \
 
 COPY  ./scripts/app-run.sh /scripts/
 
-RUN chown -R $APACHE_USER:$APACHE_USER /etc/httpd/logs/ && \
-    chown -R $APACHE_USER:0 /run/httpd/ && \
-    chgrp -R 0 /etc/httpd/logs/ && \
+RUN chown -R $APACHE_USER:$APACHE_USER $APP_DIRS && \
+    chgrp -R 0 $APP_DIRS && \
     chmod -R g=u $APP_ROOT && \
     chmod +x $APP_ROOT/app-run.sh && \ 
     echo "Hello from Containerfile 3" > /var/www/html/index.html
