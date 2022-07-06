@@ -7,7 +7,8 @@ ENV PORT=8080 \
 
 ENV APP_DIRS /etc/httpd/logs/  /run/httpd/
 
-RUN yum install -y httpd && \
+RUN yum --disablerepo=* --enablerepo="rhel-7-server-rpms" && \
+    yum install -y httpd && \
     yum clean all
 
 COPY ./src/  $DOCROOT
