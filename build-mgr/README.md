@@ -8,3 +8,17 @@ oc set deployment-hook dc/mysql --pre --failure-policy=ignore -c mysql -- echo "
 
 ## Patch prehook
 oc patch dc mysql -p='{"spec":{"strategy":{"rollingParams":{"pre": {"failurePolicy": "ignore", "execNewPod": {"containerName": "mysql", "command":["echo", "Send Hi"]}}}}}}'
+
+# PRE BUILD
+QUERY="create table test(col1 varchar(10), col2 varchar(10));"
+echo $QUERY | mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P3306 -D $MYSQL_DATABASE
+
+mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P3306 -D $MYSQL_DATABASE -e "show tables;"
+
+Warning: Using a password on the command line interface can be insecure.
++----------------+
+| Tables_in_bank |
++----------------+
+| test           |
++----------------+
+
