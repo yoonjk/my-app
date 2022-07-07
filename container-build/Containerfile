@@ -1,2 +1,4 @@
 # Use the httpd-parent image as base
-FROM quay.io/redhattraining/httpd-parent
+FROM httpd-parent
+
+RUN echo "Hello World using onbuild..."
