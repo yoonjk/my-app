@@ -1,0 +1,31 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: nginx-template
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: ${POD_NAME}
+    name: ${POD_NAME}
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: ${POD_NAME}
+    strategy: {}
+    template:
+      metadata:
+        labels:
+          app: ${POD_NAME}
+      spec:
+        containers:
+        - image: bitnami/nginx
+          name: nginx
+        resources: {}
+parameters:
+- description: Pod name parameters
+  name: POD_NAME
+  required: true
+  value: hello
