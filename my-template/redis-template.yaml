@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: redis-template
+  annotations:
+    description: "Desc"
+    iconClass: "icon-redis"
+    tags: "database,nosql"
+
+objects:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: redis-config
+  data:
+    redis-config: |
+      maxmemory 20mb
+      maxmemory-policy allkeys-lru
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: redis-master
+  spec:
+    containers:
+    - env:
+      - name: REDIS_PASSWORD
+        value: ${REDIS_PASSWORD}
+      - name: MASTER
+        value: ${MASTER}
+      image: redis
+      name: master
+      command:
+      - redis-server
+      - "/redis-master/redis.conf"
+      ports:
+      - containerPort: 6379
+        protocol: TCP
+      volumeMounts:
+      - name: data
+        mountPath: /redis-master-data
+      - name: config
+        mountPath: /redis-master
+    volumes:
+    - name: data
+      emptyDir: {}
+    - name: config
+      configMap:
+        name: redis-config
+        items:
+        - key: redis-config
+          path: redis.conf
+parameters:
+- description: Password used
+  from: '[A-Z0-9]{8}'
+  generate: expression
+  name: REDIS_PASSWORD
+- description: is redis master 
+  displayName: isMaster or slave
+  name: MASTER
+  value: "true"
+labels:
+  template: "redis-template"
+  app: "test"
+  redis: master 
+message: "Your admin credentials are ${REDIS_PASSWORD}"
