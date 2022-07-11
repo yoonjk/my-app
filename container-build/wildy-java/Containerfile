@@ -1,0 +1,38 @@
+FROM ubi8/ubi:8.5
+
+MAINTAINER Red Hat Training <nexweb1@gmail.com>
+
+Label Component="wildy java" \
+      Name="wildy disp" \
+      Version="1.0.1" \
+      Release="1.0" 
+
+Label io.k8s.description="K8S desc" \
+      io.k8s.display-name="k8s disp" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="wildfly,java"
+
+ENV APP_ROOT=/opt/app-root \
+    PORT=8080 \
+    JAVA_OPTIONS="-Xmx512m"
+
+RUN yum install -y --nodocs --disableplugin=subscription-manager java-1.8.0-openjdk-headless && \
+    yum clean all --disableplugin=subscription-manager -y && \
+    groupadd -r wildfly -g 1001 -f && \
+    useradd wildfly && \
+    mkdir -p ${APP_ROOT}/bin
+
+ADD https://github.com/RedHatTraining/DO288-apps/releases/download/OCP-4.1-1/hello-java.jar ${APP_ROOT}/bin
+
+COPY ./app-run.sh /opt/app-root/bin/
+
+RUN chown -R wildfly:wildfly ${APP_ROOT}/ && \
+    chmod -R 700 ${APP_ROOT}/ && \
+    chmod +x ${APP_ROOT}/bin/app-run.sh
+
+
+EXPOSE ${PORT}
+
+USER wildfly
+
+CMD /opt/app-root/bin/app-run.sh
