@@ -1,7 +1,16 @@
 
-echo "Stop do288-apache...!"
-podman stop do288-apache 
-echo "Remove do288-apache image"
-podman rm do288-apache
+IMG="$1"
+DOCKERFILE="$2"
 
-podman build -t do288-apache .
+if [ -z $IMG ]; then
+    echo "Usage: ./docker-build.sh imageName dockerfileName"
+    echo "./docker-build.sh my-httpd "
+    echo "./docker-build.sh my-httpd Containerfile"
+    exit 0
+fi
+
+if [ -z $DOCKERFILE ]; then
+  DOCKERFILE="Containerfile"
+fi
+
+podman build -t ${IMG} . -f ${DOCKERFILE}
